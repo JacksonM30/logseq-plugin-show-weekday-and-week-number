@@ -311,10 +311,10 @@ export const createSettingButton = (): HTMLButtonElement => {
   button.textContent = "⚙"
   button.title = t("Open plugin setting")
   button.style.marginLeft = "1em"
-  button.addEventListener("click", () => {
-    ;(async () => {
-      try { await (logseq.App as any).invokeExternalCommand("logseq.ui/toggle-settings") } catch (e) { /* ignore */ }
-    })()
+  button.addEventListener("click", (ev) => {
+    ev.stopPropagation()
+    // "logseq.ui/toggle-settings" breaks the UI on Logseq DB 2.0.2; open this plugin's settings through the SDK instead
+    try { logseq.showSettingsUI() } catch (e) { /* ignore */ }
   })
   return button
 }

@@ -51,6 +51,7 @@ export const settingsTemplate = (logseqSettings: LSPluginBaseInfo['settings'] | 
   } else {
     return [
       ...commonSettings(logseqSettings, logseqDbGraph, logseqMdModel, userLanguage),
+      ...dailyJournalSettings(logseqSettings, logseqDbGraph, logseqMdModel),
       ...journalBoundariesSettings(logseqSettings, logseqDbGraph, logseqMdModel),
       ...leftCalendarSettings(logseqSettings, logseqDbGraph, logseqMdModel),
     ]
