@@ -54,6 +54,7 @@ export const settingsTemplate = (logseqSettings: LSPluginBaseInfo['settings'] | 
       ...dailyJournalSettings(logseqSettings, logseqDbGraph, logseqMdModel),
       ...journalBoundariesSettings(logseqSettings, logseqDbGraph, logseqMdModel),
       ...leftCalendarSettings(logseqSettings, logseqDbGraph, logseqMdModel),
+      ...weeklyJournalSettings(logseqSettings, logseqDbGraph, logseqMdModel),
     ]
   }
 }

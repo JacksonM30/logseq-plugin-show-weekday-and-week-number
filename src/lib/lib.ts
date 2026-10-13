@@ -5,7 +5,7 @@ import { booleanDbGraph } from ".."
 import { enableRelativeTime, enableWeekNumber } from "../dailyJournalDetails"
 import { SettingKeys } from "../settings/SettingKeys"
 import { DayShortCode } from "../types"
-import { findPageUuid, getPageBlocks } from "./query/advancedQuery"
+import { findDbWeeklyPageUuid, findPageUuid, getPageBlocks, parseWeeklyPageName } from "./query/advancedQuery"
 
 // Lightweight built-in confirm dialog implemented with <dialog>, falling back to a simple overlay
 // Uses `logseq-l10n`'s `t()` for translations.
@@ -394,6 +394,19 @@ export const openPageFromPageName = async (pageName: string, shiftKey: boolean) 
     } else {
       logseq.UI.showMsg(t("Cancelled"), "warning")
     }
+  }
+
+  // DB graph: weekly journals live under the year page, so look them up by parent instead of by "yyyy/Wnn"
+  const weekly = booleanDbGraph() ? parseWeeklyPageName(pageName) : null
+  if (weekly) {
+    const weeklyUuid = await findDbWeeklyPageUuid(weekly.year, weekly.week)
+    if (!weeklyUuid)
+      logseq.UI.showMsg(`Weekly page "${weekly.week}" was not found under "${weekly.year}".`, 'warning', { timeout: 4000 })
+    else if (shiftKey === true)
+      await logseq.Editor.openInRightSidebar(weeklyUuid)
+    else
+      logseq.App.pushState('page', { name: weeklyUuid })
+    return
   }
 
   if (shiftKey === true) {
